@@ -1,0 +1,2 @@
+class IntelController < ApplicationController
+end

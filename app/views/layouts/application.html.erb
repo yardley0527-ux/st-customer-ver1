@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<%= render 'shared/copyright_header' %>
+<html lang="en">
+<head>
+  <%= render 'shared/head' %>
+
+  <%# Optional: page related CSS %>
+  <%= yield :head_block %>
+</head>
+<body class="mod-bg-1 <%= yield(:preemptiveclass) %>">
+
+<%# save-settings-script %>
+<%= render 'shared/scripts_loading_saving' %>
+
+<!-- BEGIN Page Wrapper -->
+<div class="page-wrapper">
+
+  <div class="page-inner">
+
+    <%= render 'shared/left_panel' %>
+
+    <div class="page-content-wrapper">
+
+      <%= render 'shared/page_header' %>
+
+      <!-- BEGIN Page Content -->
+      <!-- the #js-page-content id is needed for some plugins to initialize -->
+      <main id="js-page-content" role="main" class="page-content">
+        <% if content_for?(:preemptiveclass) %>
+          <!-- Page heading removed for composed layout -->
+        <% else %>
+          <%= render 'shared/page_breadcrumb' %>
+          <%= render 'shared/page_heading' %>
+        <% end %>
+        <%= yield %>
+      </main>
+      <%= render 'shared/page_content_overlay' %>
+
+      <!-- END Page Content -->
+
+      <%= render 'shared/page_footer' %>
+
+      <%= render 'shared/shortcut_modal' %>
+
+      <%= render 'shared/color_profile_reference' %>
+
+    </div>
+
+  </div>
+
+</div>
+<!-- END Page Wrapper -->
+
+<%= render 'shared/shortcut_menu' %>
+
+<%= render 'shared/shortcut_messenger' %>
+
+<%= render 'shared/page_settings' %>
+
+<%= render 'shared/scripts_base_plugins' %>
+<%# Custom scripts per page can be added. %>
+<%= yield :scripts_block %>
+</body>
+</html>

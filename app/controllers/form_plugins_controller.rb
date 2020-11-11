@@ -1,0 +1,2 @@
+class FormPluginsController < ApplicationController
+end
