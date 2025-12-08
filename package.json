@@ -1,14 +1,15 @@
 {
-  "name": "smartadmin_rails_seed",
+  "name": "st-customer-ver1",
   "private": true,
   "dependencies": {
-    "@rails/actioncable": "^6.0.0-alpha",
-    "@rails/activestorage": "^6.0.0-alpha",
-    "@rails/ujs": "^6.0.0-alpha",
-    "@rails/webpacker": "^4.0.7"
+    "@babel/core": "7.22.20",
+    "@babel/plugin-transform-runtime": "7.22.10",
+    "@babel/preset-env": "7.22.20",
+    "@rails/webpacker": "5.4.4",
+    "babel-loader": "8.2.2",
+    "webpack": "4.46.0",
+    "webpack-cli": "3.3.12",
+    "webpack-dev-server": "3.11.3"
   },
-  "version": "0.1.0",
-  "devDependencies": {
-    "webpack-dev-server": "^3.8.0"
-  }
+  "devDependencies": {}
 }
