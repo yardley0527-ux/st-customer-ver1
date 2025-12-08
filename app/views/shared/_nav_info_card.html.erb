@@ -1,4 +1,3 @@
-<%# Infocard %>
 <div class="info-card">
   <%= image_tag "smartadmin/demo/avatars/#{Rails.configuration.avatar}", class: 'profile-image rounded-circle', alt: Rails.configuration.user %>
   <div class="info-card-text">
@@ -7,10 +6,7 @@
 				<%= Rails.configuration.user %>
 			</span>
     <% end %>
-    <span class="d-inline-block text-truncate text-truncate-sm">Toronto, Canada</span>
+    <span class="d-inline-block text-truncate text-truncate-sm">blank</span>
   </div>
   <%= image_tag 'smartadmin/card-backgrounds/cover-2-lg.png', class: 'cover', alt: 'cover' %>
-  <%= link_to '#', onclick: 'return false;', class: 'pull-trigger-btn', data: {action: 'toggle', class: 'list-filter-active', target: '.page-sidebar', focus: 'nav_filter_input'} do %>
-    <i class="fal fa-angle-down"></i>
-  <% end %>
 </div>

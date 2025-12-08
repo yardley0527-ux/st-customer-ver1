@@ -1,0 +1,283 @@
+<!-- app/views/admin/shopline_customers/show.html.erb -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">客戶詳細資訊</h5>
+          <div class="card-tools">
+            <%= link_to '返回列表',
+            admin_shopline_customers_path(membership_level: @shopline_customer.membership_level),
+            class: 'btn btn-sm btn-secondary' %>
+            <%= link_to '編輯', edit_admin_shopline_customer_path(@shopline_customer), class: 'btn btn-sm btn-primary' %>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h6 class="border-bottom pb-2">基本資訊</h6>
+              <table class="table table-sm">
+                <tr>
+                  <th style="width: 30%">客戶 ID</th>
+                  <td><%= @shopline_customer.shopline_id %></td>
+                </tr>
+                <tr>
+                  <th>姓名</th>
+                  <td><%= @shopline_customer.full_name %></td>
+                </tr>
+                <tr>
+                  <th>電郵</th>
+                  <td><%= @shopline_customer.email %></td>
+                </tr>
+                <tr>
+                  <th>加入日期</th>
+                  <td><%= @shopline_customer.joined_at&.strftime('%Y-%m-%d %H:%M:%S') %></td>
+                </tr>
+                <tr>
+                  <th>加入來源</th>
+                  <td><%= @shopline_customer.join_source %></td>
+                </tr>
+                <tr>
+                  <th>語言</th>
+                  <td><%= @shopline_customer.language %></td>
+                </tr>
+                <tr>
+                  <th>性別</th>
+                  <td><%= @shopline_customer.gender %></td>
+                </tr>
+                <tr>
+                  <th>生日</th>
+                  <td><%= @shopline_customer.birthdate&.strftime('%Y-%m-%d') %></td>
+                </tr>
+                <tr>
+                  <th>IG 帳號</th>
+                  <td><%= @shopline_customer.instagram_account %></td>
+                </tr>
+              </table>
+              
+              <h6 class="border-bottom pb-2 mt-4">聯絡資訊</h6>
+              <table class="table table-sm">
+                <tr>
+                  <th style="width: 30%">手機號碼</th>
+                  <td><%= @shopline_customer.mobile_phone %></td>
+                </tr>
+                <tr>
+                  <th>國際電話區碼</th>
+                  <td><%= @shopline_customer.country_code %></td>
+                </tr>
+                <tr>
+                  <th>聯絡電話</th>
+                  <td><%= @shopline_customer.phone %></td>
+                </tr>
+                <tr>
+                  <th>地址 1</th>
+                  <td><%= @shopline_customer.address_1 %></td>
+                </tr>
+                <tr>
+                  <th>地址 2</th>
+                  <td><%= @shopline_customer.address_2 %></td>
+                </tr>
+                <tr>
+                  <th>城市</th>
+                  <td><%= @shopline_customer.city %></td>
+                </tr>
+                <tr>
+                  <th>地區/州/省份</th>
+                  <td><%= @shopline_customer.state %></td>
+                </tr>
+                <tr>
+                  <th>郵政編號</th>
+                  <td><%= @shopline_customer.postal_code %></td>
+                </tr>
+                <tr>
+                  <th>國家</th>
+                  <td><%= @shopline_customer.country %></td>
+                </tr>
+              </table>
+            </div>
+            
+            <div class="col-md-6">
+              <h6 class="border-bottom pb-2">會員資訊</h6>
+              <table class="table table-sm">
+                <tr>
+                  <th style="width: 30%">會員狀態</th>
+                  <td><%= @shopline_customer.is_member ? '是' : '否' %></td>
+                </tr>
+                <tr>
+                  <th>會員註冊日期</th>
+                  <td><%= @shopline_customer.member_registered_at&.strftime('%Y-%m-%d %H:%M:%S') %></td>
+                </tr>
+                <tr>
+                  <th>會員註冊來源</th>
+                  <td><%= @shopline_customer.member_registration_source %></td>
+                </tr>
+                <tr>
+                  <th>會員級別</th>
+                  <td><%= @shopline_customer.membership_level %></td>
+                </tr>
+                <tr>
+                  <th>會員有效期</th>
+                  <td><%= @shopline_customer.membership_expiry_date&.strftime('%Y-%m-%d') %></td>
+                </tr>
+                <tr>
+                  <th>Facebook ID</th>
+                  <td><%= @shopline_customer.facebook_id %></td>
+                </tr>
+                <tr>
+                  <th>LINE ID</th>
+                  <td><%= @shopline_customer.line_id %></td>
+                </tr>
+                <tr>
+                  <th>黑名單</th>
+                  <td>
+                    <span class="badge <%= @shopline_customer.blacklisted ? 'bg-danger' : 'bg-success' %>">
+                      <%= @shopline_customer.blacklisted ? '是' : '否' %>
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>已設置密碼</th>
+                  <td><%= @shopline_customer.has_password ? '是' : '否' %></td>
+                </tr>
+                <tr>
+                  <th>最後登入時間</th>
+                  <td><%= @shopline_customer.last_login_at&.strftime('%Y-%m-%d %H:%M:%S') %></td>
+                </tr>
+              </table>
+              
+              <h6 class="border-bottom pb-2 mt-4">消費數據</h6>
+              <table class="table table-sm">
+                <tr>
+                  <th style="width: 30%">訂單數</th>
+                  <td><%= @shopline_customer.order_count %></td>
+                </tr>
+                <tr>
+                  <th>累積金額</th>
+                  <td><%= number_to_currency(@shopline_customer.total_amount, unit: 'NT$') if @shopline_customer.total_amount.present? %></td>
+                </tr>
+                <tr>
+                  <th>已發放購物金</th>
+                  <td><%= number_to_currency(@shopline_customer.issued_shopping_credits, unit: 'NT$') if @shopline_customer.issued_shopping_credits.present? %></td>
+                </tr>
+                <tr>
+                  <th>已使用購物金</th>
+                  <td><%= number_to_currency(@shopline_customer.used_shopping_credits, unit: 'NT$') if @shopline_customer.used_shopping_credits.present? %></td>
+                </tr>
+                <tr>
+                  <th>現有購物金</th>
+                  <td><%= number_to_currency(@shopline_customer.current_shopping_credits, unit: 'NT$') if @shopline_customer.current_shopping_credits.present? %></td>
+                </tr>
+                <tr>
+                  <th>已發放點數</th>
+                  <td><%= @shopline_customer.issued_points %></td>
+                </tr>
+                <tr>
+                  <th>已使用點數</th>
+                  <td><%= @shopline_customer.used_points %></td>
+                </tr>
+                <tr>
+                  <th>現有點數</th>
+                  <td><%= @shopline_customer.current_points %></td>
+                </tr>
+              </table>
+              
+              <h6 class="border-bottom pb-2 mt-4">行銷訂閱狀態</h6>
+              <table class="table table-sm">
+                <tr>
+                  <th style="width: 30%">接受電郵優惠宣傳</th>
+                  <td><%= @shopline_customer.accept_email_marketing ? '是' : '否' %></td>
+                </tr>
+                <tr>
+                  <th>接受簡訊優惠宣傳</th>
+                  <td><%= @shopline_customer.accept_sms_marketing ? '是' : '否' %></td>
+                </tr>
+                <tr>
+                  <th>接受 FB 優惠宣傳</th>
+                  <td><%= @shopline_customer.accept_fb_marketing ? '是' : '否' %></td>
+                </tr>
+                <tr>
+                  <th>接受 LINE 優惠宣傳</th>
+                  <td><%= @shopline_customer.accept_line_marketing ? '是' : '否' %></td>
+                </tr>
+                <tr>
+                  <th>接受 WhatsApp 優惠宣傳</th>
+                  <td><%= @shopline_customer.accept_whatsapp_marketing ? '是' : '否' %></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          
+          <div class="row mt-4">
+            <div class="col-md-12">
+              <h6 class="border-bottom pb-2">UTM 資訊</h6>
+              <table class="table table-sm">
+                <tr>
+                  <th style="width: 15%">UTM 來源</th>
+                  <td><%= @shopline_customer.utm_source %></td>
+                </tr>
+                <tr>
+                  <th>UTM 媒介</th>
+                  <td><%= @shopline_customer.utm_medium %></td>
+                </tr>
+                <tr>
+                  <th>UTM 來源/媒介</th>
+                  <td><%= @shopline_customer.utm_source_medium %></td>
+                </tr>
+                <tr>
+                  <th>UTM 活動名稱</th>
+                  <td><%= @shopline_customer.utm_campaign %></td>
+                </tr>
+                <tr>
+                  <th>UTM 活動字詞</th>
+                  <td><%= @shopline_customer.utm_term %></td>
+                </tr>
+                <tr>
+                  <th>UTM 活動內容</th>
+                  <td><%= @shopline_customer.utm_content %></td>
+                </tr>
+                <tr>
+                  <th>UTM 點擊時間</th>
+                  <td><%= @shopline_customer.utm_clicked_at&.strftime('%Y-%m-%d %H:%M:%S') %></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          
+          <div class="row mt-4">
+            <div class="col-md-12">
+              <h6 class="border-bottom pb-2">推薦人資訊</h6>
+              <table class="table table-sm">
+                <tr>
+                  <th style="width: 15%">推薦人姓名</th>
+                  <td><%= @shopline_customer.referrer_name %></td>
+                </tr>
+                <tr>
+                  <th>推薦人電郵</th>
+                  <td><%= @shopline_customer.referrer_email %></td>
+                </tr>
+                <tr>
+                  <th>推薦人手機</th>
+                  <td><%= @shopline_customer.referrer_phone %></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          
+          <% if @shopline_customer.notes.present? || @shopline_customer.tags.present? %>
+            <div class="row mt-4">
+              <div class="col-md-12">
+                <h6 class="border-bottom pb-2">備註和標籤</h6>
+                <% if @shopline_customer.tags.present? %>
+                  <p><strong>標籤：</strong> <%= @shopline_customer.tags %></p>
+                <% end %>
+                <% if @shopline_customer.notes.present? %>
+                  <p><strong>備註：</strong> <%= @shopline_customer.notes %></p>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

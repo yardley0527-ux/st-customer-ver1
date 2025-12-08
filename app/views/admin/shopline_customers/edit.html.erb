@@ -1,0 +1,193 @@
+<!-- app/views/admin/shopline_customers/edit.html.erb -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">編輯客戶資料</h5>
+          <div class="card-tools">
+            <%= link_to '返回詳情', admin_shopline_customer_path(@shopline_customer), class: 'btn btn-sm btn-secondary' %>
+          </div>
+        </div>
+        <div class="card-body">
+          <%= form_with(model: [:admin, @shopline_customer], local: true) do |form| %>
+            <% if @shopline_customer.errors.any? %>
+              <div class="alert alert-danger">
+                <h6><%= pluralize(@shopline_customer.errors.count, "error") %> 導致無法儲存：</h6>
+                <ul>
+                  <% @shopline_customer.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <h6 class="border-bottom pb-2">基本資訊</h6>
+                
+                <div class="mb-3">
+                  <%= form.label :shopline_id, "客戶 ID", class: "form-label" %>
+                  <%= form.text_field :shopline_id, class: "form-control", readonly: true %>
+                </div>
+                
+                <div class="mb-3">
+                  <%= form.label :full_name, "姓名", class: "form-label" %>
+                  <%= form.text_field :full_name, class: "form-control" %>
+                </div>
+                
+                <div class="mb-3">
+                  <%= form.label :email, "電郵", class: "form-label" %>
+                  <%= form.email_field :email, class: "form-control" %>
+                </div>
+                
+                <div class="mb-3">
+                  <%= form.label :gender, "性別", class: "form-label" %>
+                  <%= form.select :gender, [["男", "男"], ["女", "女"], ["其他", "其他"]], { include_blank: "請選擇" }, class: "form-select" %>
+                </div>
+                
+                <div class="mb-3">
+                  <%= form.label :birthdate, "生日", class: "form-label" %>
+                  <%= form.date_field :birthdate, class: "form-control" %>
+                </div>
+                
+                <div class="mb-3">
+                  <%= form.label :instagram_account, "IG 帳號", class: "form-label" %>
+                  <%= form.text_field :instagram_account, class: "form-control" %>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <h6 class="border-bottom pb-2">聯絡資訊</h6>
+                
+                <div class="row">
+                  <div class="col-md-4">
+                    <%= form.label :country_code, "國際電話區碼", class: "form-label" %>
+                    <%= form.text_field :country_code, class: "form-control" %>
+                  </div>
+                  <div class="col-md-8">
+                    <%= form.label :mobile_phone, "手機", class: "form-label" %>
+                    <%= form.text_field :mobile_phone, class: "form-control" %>
+                  </div>
+                </div>
+                
+                <div class="mb-3 mt-3">
+                  <%= form.label :phone, "聯絡電話", class: "form-label" %>
+                  <%= form.text_field :phone, class: "form-control" %>
+                </div>
+                
+                <div class="mb-3">
+                  <%= form.label :address_1, "地址 1", class: "form-label" %>
+                  <%= form.text_field :address_1, class: "form-control" %>
+                </div>
+                
+                <div class="mb-3">
+                  <%= form.label :address_2, "地址 2", class: "form-label" %>
+                  <%= form.text_field :address_2, class: "form-control" %>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <%= form.label :city, "城市", class: "form-label" %>
+                    <%= form.text_field :city, class: "form-control" %>
+                  </div>
+                  <div class="col-md-6">
+                    <%= form.label :state, "地區/州/省份", class: "form-label" %>
+                    <%= form.text_field :state, class: "form-control" %>
+                  </div>
+                </div>
+                
+                <div class="row mt-3">
+                  <div class="col-md-6">
+                    <%= form.label :postal_code, "郵政編號", class: "form-label" %>
+                    <%= form.text_field :postal_code, class: "form-control" %>
+                  </div>
+                  <div class="col-md-6">
+                    <%= form.label :country, "國家", class: "form-label" %>
+                    <%= form.text_field :country, class: "form-control" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row mt-4">
+              <div class="col-md-6">
+                <h6 class="border-bottom pb-2">會員資訊</h6>
+                
+                <div class="mb-3 form-check">
+                  <%= form.check_box :is_member, class: "form-check-input" %>
+                  <%= form.label :is_member, "會員", class: "form-check-label" %>
+                </div>
+                
+                <div class="mb-3">
+                  <%= form.label :membership_level, "會員級別", class: "form-label" %>
+                  <%= form.text_field :membership_level, class: "form-control" %>
+                </div>
+                
+                <div class="mb-3">
+                  <%= form.label :membership_expiry_date, "會員有效期", class: "form-label" %>
+                  <%= form.date_field :membership_expiry_date, class: "form-control" %>
+                </div>
+                
+                <div class="mb-3 form-check">
+                  <%= form.check_box :blacklisted, class: "form-check-input" %>
+                  <%= form.label :blacklisted, "黑名單", class: "form-check-label" %>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <h6 class="border-bottom pb-2">行銷訂閱設定</h6>
+                
+                <div class="mb-3 form-check">
+                  <%= form.check_box :accept_email_marketing, class: "form-check-input" %>
+                  <%= form.label :accept_email_marketing, "接受電郵優惠宣傳", class: "form-check-label" %>
+                </div>
+                
+                <div class="mb-3 form-check">
+                  <%= form.check_box :accept_sms_marketing, class: "form-check-input" %>
+                  <%= form.label :accept_sms_marketing, "接受簡訊優惠宣傳", class: "form-check-label" %>
+                </div>
+                
+                <div class="mb-3 form-check">
+                  <%= form.check_box :accept_fb_marketing, class: "form-check-input" %>
+                  <%= form.label :accept_fb_marketing, "接受 FB 優惠宣傳", class: "form-check-label" %>
+                </div>
+                
+                <div class="mb-3 form-check">
+                  <%= form.check_box :accept_line_marketing, class: "form-check-input" %>
+                  <%= form.label :accept_line_marketing, "接受 LINE 優惠宣傳", class: "form-check-label" %>
+                </div>
+                
+                <div class="mb-3 form-check">
+                  <%= form.check_box :accept_whatsapp_marketing, class: "form-check-input" %>
+                  <%= form.label :accept_whatsapp_marketing, "接受 WhatsApp 優惠宣傳", class: "form-check-label" %>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row mt-4">
+              <div class="col-md-12">
+                <h6 class="border-bottom pb-2">備註和標籤</h6>
+                
+                <div class="mb-3">
+                  <%= form.label :tags, "標籤", class: "form-label" %>
+                  <%= form.text_field :tags, class: "form-control" %>
+                </div>
+                
+                <div class="mb-3">
+                  <%= form.label :notes, "備註", class: "form-label" %>
+                  <%= form.text_area :notes, class: "form-control", rows: 3 %>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-4">
+              <%= form.submit "儲存變更", class: "btn btn-primary" %>
+              <%= link_to "取消", admin_shopline_customer_path(@shopline_customer), class: "btn btn-secondary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
+  include Pagy::Frontend
+
   def class_if_current_page(entry:)
     selected = is_current_page?(entry)
 

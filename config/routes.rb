@@ -1,12 +1,32 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  root 'welcome#index'
+  root to: "admin/shopline_customers#index"
+
+  get "/login", to: "sessions#new"
+  post "/login", to: "sessions#create"
+  delete "/logout", to: "sessions#destroy"
+
+  namespace :admin do
+    resources :shopline_customers, only: [:index, :show, :edit, :update]
+    resources :shopline_orders, only: [:index, :show, :edit, :update] # 新增這一行
+    resources :shopline_imports, only: [:new, :create] do
+      collection do
+        get :import_errors
+      end
+    end
+    resources :shopline_order_imports, only: [:new, :create] do # 新增這一行
+      collection do
+        get :import_errors
+      end
+    end
+    get 'dashboard', to: 'dashboard#index', as: :dashboard
+  end
+
+  get "/admin_dashboard", to: "admins#dashboard"
+
   get 'pages/page_search'
 
   get 'intel/intel_analytics_dashboard'
   get 'intel/intel_marketing_dashboard'
-  get 'intel/intel_privacy'
-  get 'intel/intel_build_notes'
   get 'intel/intel_introduction'
 
   get 'settings/settings_how_it_works'

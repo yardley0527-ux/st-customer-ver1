@@ -1,0 +1,53 @@
+<!-- app/views/admin/shopline_imports/new.html.erb -->
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">匯入 Shopline 客戶資料</h4>
+        </div>
+        <div class="card-body">
+          <% if flash[:alert] %>
+            <div class="alert alert-danger">
+              <%= flash[:alert] %>
+            </div>
+          <% end %>
+          
+          <%= form_tag admin_shopline_imports_path, multipart: true do %>
+            <div class="mb-4">
+              <p>請上傳從 Shopline 後台匯出的客戶資料檔案：</p>
+              <ul>
+                <li>支援的檔案格式：.xls, .xlsx, .csv</li>
+                <li>檔案大小上限：50MB</li>
+                <li>請確保檔案包含完整的欄位資訊</li>
+              </ul>
+            </div>
+            
+            <div class="mb-3">
+              <label for="file" class="form-label">選擇檔案</label>
+              <%= file_field_tag :file, class: 'form-control', accept: '.xls,.xlsx,.csv' %>
+              <div class="form-text">檔案匯入後將自動進行資料更新或新增。</div>
+            </div>
+            
+            <div class="form-check mb-4">
+              <%= check_box_tag :confirm, '1', false, class: 'form-check-input', required: true %>
+              <label class="form-check-label" for="confirm">
+                我確認已備份資料，且了解匯入可能造成資料更新
+              </label>
+            </div>
+            
+            <div class="d-flex justify-content-between">
+              <%= link_to '取消', admin_dashboard_path, class: 'btn btn-secondary' %>
+              <%= submit_tag '開始匯入', class: 'btn btn-primary', data: { disable_with: '處理中...' } %>
+            </div>
+          <% end %>
+        </div>
+        <div class="card-footer bg-light">
+          <small class="text-muted">
+            提示：匯入大型檔案需要較長處理時間，您可以離開此頁面，系統會在背景處理並於完成後通知您。
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

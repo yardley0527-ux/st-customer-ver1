@@ -1,0 +1,119 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  shopline_id: MyString
+  full_name: MyString
+  email: MyString
+  joined_at: 2025-03-10 17:28:12
+  join_source: MyString
+  language: MyString
+  order_count: 1
+  total_amount: 9.99
+  issued_shopping_credits: 9.99
+  deducted_shopping_credits: 9.99
+  used_shopping_credits: 9.99
+  current_shopping_credits: 9.99
+  issued_points: 1
+  deducted_points: 1
+  used_points: 1
+  current_points: 1
+  is_member: false
+  member_registered_at: 2025-03-10 17:28:12
+  member_registration_source: MyString
+  facebook_id: MyString
+  line_id: MyString
+  blacklisted: false
+  has_password: false
+  accept_email_marketing: false
+  accept_sms_marketing: false
+  accept_fb_marketing: false
+  accept_line_marketing: false
+  accept_whatsapp_marketing: false
+  last_login_at: 2025-03-10 17:28:12
+  phone: MyString
+  country_code: MyString
+  mobile_phone: MyString
+  recipient_name: MyString
+  recipient_phone: MyString
+  address_1: MyString
+  address_2: MyString
+  city: MyString
+  state: MyString
+  postal_code: MyString
+  country: MyString
+  membership_level: MyString
+  membership_expiry_date: 2025-03-10
+  gender: MyString
+  birthdate: 2025-03-10
+  instagram_account: MyString
+  tags: MyText
+  notes: MyText
+  utm_source: MyString
+  utm_medium: MyString
+  utm_source_medium: MyString
+  utm_campaign: MyString
+  utm_term: MyString
+  utm_content: MyString
+  utm_clicked_at: 2025-03-10 17:28:12
+  referrer_name: MyString
+  referrer_email: MyString
+  referrer_phone: MyString
+
+two:
+  shopline_id: MyString
+  full_name: MyString
+  email: MyString
+  joined_at: 2025-03-10 17:28:12
+  join_source: MyString
+  language: MyString
+  order_count: 1
+  total_amount: 9.99
+  issued_shopping_credits: 9.99
+  deducted_shopping_credits: 9.99
+  used_shopping_credits: 9.99
+  current_shopping_credits: 9.99
+  issued_points: 1
+  deducted_points: 1
+  used_points: 1
+  current_points: 1
+  is_member: false
+  member_registered_at: 2025-03-10 17:28:12
+  member_registration_source: MyString
+  facebook_id: MyString
+  line_id: MyString
+  blacklisted: false
+  has_password: false
+  accept_email_marketing: false
+  accept_sms_marketing: false
+  accept_fb_marketing: false
+  accept_line_marketing: false
+  accept_whatsapp_marketing: false
+  last_login_at: 2025-03-10 17:28:12
+  phone: MyString
+  country_code: MyString
+  mobile_phone: MyString
+  recipient_name: MyString
+  recipient_phone: MyString
+  address_1: MyString
+  address_2: MyString
+  city: MyString
+  state: MyString
+  postal_code: MyString
+  country: MyString
+  membership_level: MyString
+  membership_expiry_date: 2025-03-10
+  gender: MyString
+  birthdate: 2025-03-10
+  instagram_account: MyString
+  tags: MyText
+  notes: MyText
+  utm_source: MyString
+  utm_medium: MyString
+  utm_source_medium: MyString
+  utm_campaign: MyString
+  utm_term: MyString
+  utm_content: MyString
+  utm_clicked_at: 2025-03-10 17:28:12
+  referrer_name: MyString
+  referrer_email: MyString
+  referrer_phone: MyString
