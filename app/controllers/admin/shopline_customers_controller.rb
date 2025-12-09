@@ -14,17 +14,52 @@ class Admin::ShoplineCustomersController < ApplicationController
     end
   
     def edit
-    end
-  
-    def update
-      if @shopline_customer.update(shopline_customer_params)
-        redirect_to admin_shopline_customers_path(membership_level: @shopline_customer.membership_level),
-                    notice: '客戶資料已成功更新。'
-      else
-        render :edit
+      @shopline_customer = ShoplineCustomer.find(params[:id])
+    
+      @shopline_customer.build_health_questionnaire unless @shopline_customer.health_questionnaire
+      @shopline_customer.build_health_assessment unless @shopline_customer.health_assessment
+    
+      # 推薦產品需要初始至少 1 筆空物件（避免畫面沒欄位）
+      if @shopline_customer.health_assessment
+        @shopline_customer.health_assessment.health_assessment_products.build if @shopline_customer.health_assessment.health_assessment_products.empty?
       end
-    end    
-  
+    end
+
+    def update
+      # ... (Steps 1 & 2 for product_ids handling) ...
+        
+      ActiveRecord::Base.transaction do
+        # ... (Step 1: Product ID logic) ...
+        
+        # --- 2. 更新基本欄位 + 健康問卷 + 健康分析 (Mass Assignment) ---
+        @shopline_customer.update!(shopline_customer_params)
+      end
+        
+      redirect_to admin_shopline_customer_path(@shopline_customer),
+                  notice: "客戶資料已成功更新。"
+        
+    rescue ActiveRecord::RecordInvalid => e
+      # ⚠️ MODIFIED DEBUGGING CODE HERE
+      puts "\n\n❌ VALIDATION ERROR DEBUG START ❌"
+      puts "Error Message: #{e.message}"
+      # Print the full list of errors on the customer and its nested models
+      puts "Customer Errors: #{@shopline_customer.errors.full_messages}"
+      
+      # Check nested model errors
+      if @shopline_customer.health_questionnaire&.errors.any?
+        puts "Questionnaire Errors: #{@shopline_customer.health_questionnaire.errors.full_messages}"
+      end
+      if @shopline_customer.health_assessment&.errors.any?
+        puts "Assessment Errors: #{@shopline_customer.health_assessment.errors.full_messages}"
+      end
+      puts "❌ VALIDATION ERROR DEBUG END ❌\n\n"
+      # ⚠️ END OF MODIFIED DEBUGGING CODE
+      
+      flash.now[:alert] = "更新失敗: #{e.message}"
+      render :edit
+    end
+      
+      
     private
   
     def set_shopline_customer
@@ -32,20 +67,28 @@ class Admin::ShoplineCustomersController < ApplicationController
     end
   
     def shopline_customer_params
-        params.require(:shopline_customer).permit(
-          :shopline_id, :full_name, :email, :joined_at, :join_source, :language,
-          :order_count, :total_amount, 
-          :issued_shopping_credits, :deducted_shopping_credits, :used_shopping_credits, :current_shopping_credits,
-          :issued_points, :deducted_points, :used_points, :current_points,
-          :is_member, :member_registered_at, :member_registration_source,
-          :facebook_id, :line_id, :blacklisted, :has_password,
-          :accept_email_marketing, :accept_sms_marketing, :accept_fb_marketing, :accept_line_marketing, :accept_whatsapp_marketing,
-          :last_login_at, :phone, :country_code, :mobile_phone, :recipient_name, :recipient_phone,
-          :address_1, :address_2, :city, :state, :postal_code, :country,
-          :membership_level, :membership_expiry_date, :gender, :birthdate, :instagram_account,
-          :tags, :notes,
-          :utm_source, :utm_medium, :utm_source_medium, :utm_campaign, :utm_term, :utm_content, :utm_clicked_at,
-          :referrer_name, :referrer_email, :referrer_phone
-        )
+      params.require(:shopline_customer).permit(
+        :personal_note,
+    
+        health_questionnaire_attributes: [
+          :id,
+          :height_cm, :weight_kg, :body_fat_percentage,
+          :work_type, :marital_status,
+          :sleep_time, :wake_time,
+          :water_intake_ml,
+          :previous_weight_loss_methods,
+          diet_type: []
+        ],
+    
+        health_assessment_attributes: [
+          :id,
+          :interaction_level,
+          :main_health_goal,
+          :summary_notes
+        ]
+      )
     end
+    
+         
+    
   end

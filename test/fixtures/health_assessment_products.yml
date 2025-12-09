@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  shopline_customer_health_assessment: one
+  product: one
+
+two:
+  shopline_customer_health_assessment: two
+  product: two

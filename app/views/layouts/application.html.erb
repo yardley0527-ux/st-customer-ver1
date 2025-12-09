@@ -6,6 +6,9 @@
 
   <%# Optional: page related CSS %>
   <%= yield :head_block %>
+  <link rel="stylesheet" href="https://unpkg.com/@yaireo/tagify/dist/tagify.css">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 </head>
 <body class="mod-bg-1 <%= yield(:preemptiveclass) %>">
 
@@ -60,5 +63,8 @@
 <%= render 'shared/scripts_base_plugins' %>
 <%# Custom scripts per page can be added. %>
 <%= yield :scripts_block %>
+<script src="https://unpkg.com/@yaireo/tagify"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 </body>
 </html>

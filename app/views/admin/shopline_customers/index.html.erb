@@ -33,17 +33,24 @@
               <tbody>
                 <% @shopline_customers.each do |customer| %>
                   <tr>
-                    <td><%= customer.full_name %></td>
-                    <td><%= number_to_currency(customer.total_amount, unit: 'NT$') if customer.total_amount.present? %></td>
+                    <td>
+                      <%= link_to customer.full_name, admin_shopline_customer_path(customer) %>
+                    </td>
+          
+                    <td>
+                      <%= number_to_currency(customer.total_amount, unit: 'NT$') if customer.total_amount.present? %>
+                    </td>
+          
                     <td><%= customer.order_count %></td>
+          
                     <td>
                       <% if customer.instagram_account.present? %>
                         <% username = customer.instagram_account.gsub('@', '') %>
                         <%= link_to customer.instagram_account, "https://www.instagram.com/#{username}", target: "_blank", rel: "noopener" %>
                       <% end %>
                     </td>
+          
                     <td>
-                      <%= link_to '檢視', admin_shopline_customer_path(customer), class: 'btn btn-sm btn-info' %>
                       <%= link_to '編輯', edit_admin_shopline_customer_path(customer), class: 'btn btn-sm btn-primary' %>
                     </td>
                   </tr>
@@ -51,6 +58,7 @@
               </tbody>
             </table>
           </div>
+        
 
           <!-- Pagy 分頁控制 -->
           <div class="pagination-container mt-3 d-flex justify-content-center">

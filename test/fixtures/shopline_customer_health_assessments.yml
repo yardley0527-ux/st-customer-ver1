@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  shopline_customer: one
+  interaction_level: MyString
+  main_health_goal: MyText
+  summary_notes: MyText
+
+two:
+  shopline_customer: two
+  interaction_level: MyString
+  main_health_goal: MyText
+  summary_notes: MyText

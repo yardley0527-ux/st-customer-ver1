@@ -1,8 +1,19 @@
 # app/models/shopline_customer.rb
 class ShoplineCustomer < ApplicationRecord
   has_many :shopline_orders
-  validates :shopline_id, presence: true, uniqueness: true
-  validates :email, uniqueness: true, allow_blank: true
+  validates :shopline_id, presence: true
+  validates :email, uniqueness: true, allow_blank: true, on: :create  
+
+  has_one :health_questionnaire,
+  class_name: "ShoplineCustomerHealthQuestionnaire",
+  dependent: :destroy
+  accepts_nested_attributes_for :health_questionnaire, update_only: true
+
+  has_one :health_assessment,
+  class_name: "ShoplineCustomerHealthAssessment",
+  dependent: :destroy
+  accepts_nested_attributes_for :health_assessment, update_only: true
+
 
   scope :members, -> { where(is_member: true) }
   scope :non_members, -> { where(is_member: false) }

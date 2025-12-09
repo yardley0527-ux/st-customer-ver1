@@ -31,7 +31,7 @@ class SidebarEntry
             icon: 'fa-users',
             children: [
               {
-                href: admin_shopline_customers_path,
+                href: admin_shopline_customers_path(membership_level: "黑卡"),
                 title: '客戶列表'
               },
               {

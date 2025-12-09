@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_17_125917) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_09_085041) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,56 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_17_125917) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "health_assessment_products", force: :cascade do |t|
+    t.bigint "shopline_customer_health_assessment_id", null: false
+    t.bigint "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_health_assessment_products_on_product_id"
+    t.index ["shopline_customer_health_assessment_id"], name: "idx_on_shopline_customer_health_assessment_id_6907628e29"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "name"
+    t.string "category"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "shopline_customer_health_assessments", force: :cascade do |t|
+    t.bigint "shopline_customer_id", null: false
+    t.string "interaction_level"
+    t.text "main_health_goal"
+    t.text "summary_notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shopline_customer_id"], name: "idx_on_shopline_customer_id_03d1184d99"
+  end
+
+  create_table "shopline_customer_health_questionnaires", force: :cascade do |t|
+    t.bigint "shopline_customer_id", null: false
+    t.integer "height_cm"
+    t.decimal "weight_kg", precision: 5, scale: 1
+    t.integer "body_fat_percentage"
+    t.string "work_type"
+    t.date "birthdate"
+    t.string "marital_status"
+    t.integer "family_members_count"
+    t.text "family_members_details"
+    t.string "sleep_time"
+    t.string "wake_time"
+    t.integer "water_intake_ml"
+    t.string "diet_type", default: [], array: true
+    t.boolean "take_chinese_medicine"
+    t.boolean "bought_our_products"
+    t.boolean "bought_other_supplements"
+    t.text "previous_weight_loss_methods"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shopline_customer_id"], name: "idx_on_shopline_customer_id_6d5178055d"
   end
 
   create_table "shopline_customers", force: :cascade do |t|
@@ -81,6 +131,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_17_125917) do
     t.string "referrer_phone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "personal_note"
     t.index ["email"], name: "index_shopline_customers_on_email"
     t.index ["shopline_id"], name: "index_shopline_customers_on_shopline_id"
   end
@@ -112,5 +163,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_17_125917) do
     t.index ["shopline_customer_id"], name: "index_shopline_orders_on_shopline_customer_id"
   end
 
+  add_foreign_key "health_assessment_products", "products"
+  add_foreign_key "health_assessment_products", "shopline_customer_health_assessments"
+  add_foreign_key "shopline_customer_health_assessments", "shopline_customers"
+  add_foreign_key "shopline_customer_health_questionnaires", "shopline_customers"
   add_foreign_key "shopline_orders", "shopline_customers"
 end

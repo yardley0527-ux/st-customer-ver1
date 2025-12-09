@@ -1,16 +1,31 @@
-<!-- app/views/admin/shopline_customers/edit.html.erb -->
+<% if @shopline_customer.errors.any? %>
+  <div class="alert alert-danger">
+    <ul>
+      <% @shopline_customer.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
 <div class="container-fluid">
+
   <div class="row">
     <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">編輯客戶資料</h5>
+
+      <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">編輯客戶備註與健康資料</h5>
           <div class="card-tools">
             <%= link_to '返回詳情', admin_shopline_customer_path(@shopline_customer), class: 'btn btn-sm btn-secondary' %>
           </div>
         </div>
+
         <div class="card-body">
-          <%= form_with(model: [:admin, @shopline_customer], local: true) do |form| %>
+
+          <%= form_with(model: [:admin, @shopline_customer], local: true) do |f| %>
+
             <% if @shopline_customer.errors.any? %>
               <div class="alert alert-danger">
                 <h6><%= pluralize(@shopline_customer.errors.count, "error") %> 導致無法儲存：</h6>
@@ -21,173 +36,180 @@
                 </ul>
               </div>
             <% end %>
-            
-            <div class="row">
-              <div class="col-md-6">
-                <h6 class="border-bottom pb-2">基本資訊</h6>
-                
-                <div class="mb-3">
-                  <%= form.label :shopline_id, "客戶 ID", class: "form-label" %>
-                  <%= form.text_field :shopline_id, class: "form-control", readonly: true %>
-                </div>
-                
-                <div class="mb-3">
-                  <%= form.label :full_name, "姓名", class: "form-label" %>
-                  <%= form.text_field :full_name, class: "form-control" %>
-                </div>
-                
-                <div class="mb-3">
-                  <%= form.label :email, "電郵", class: "form-label" %>
-                  <%= form.email_field :email, class: "form-control" %>
-                </div>
-                
-                <div class="mb-3">
-                  <%= form.label :gender, "性別", class: "form-label" %>
-                  <%= form.select :gender, [["男", "男"], ["女", "女"], ["其他", "其他"]], { include_blank: "請選擇" }, class: "form-select" %>
-                </div>
-                
-                <div class="mb-3">
-                  <%= form.label :birthdate, "生日", class: "form-label" %>
-                  <%= form.date_field :birthdate, class: "form-control" %>
-                </div>
-                
-                <div class="mb-3">
-                  <%= form.label :instagram_account, "IG 帳號", class: "form-label" %>
-                  <%= form.text_field :instagram_account, class: "form-control" %>
-                </div>
+
+            <!-- 個人備註 -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h6 class="mb-0">個人備註（僅後台使用）</h6>
               </div>
-              
-              <div class="col-md-6">
-                <h6 class="border-bottom pb-2">聯絡資訊</h6>
-                
-                <div class="row">
-                  <div class="col-md-4">
-                    <%= form.label :country_code, "國際電話區碼", class: "form-label" %>
-                    <%= form.text_field :country_code, class: "form-control" %>
-                  </div>
-                  <div class="col-md-8">
-                    <%= form.label :mobile_phone, "手機", class: "form-label" %>
-                    <%= form.text_field :mobile_phone, class: "form-control" %>
-                  </div>
-                </div>
-                
-                <div class="mb-3 mt-3">
-                  <%= form.label :phone, "聯絡電話", class: "form-label" %>
-                  <%= form.text_field :phone, class: "form-control" %>
-                </div>
-                
-                <div class="mb-3">
-                  <%= form.label :address_1, "地址 1", class: "form-label" %>
-                  <%= form.text_field :address_1, class: "form-control" %>
-                </div>
-                
-                <div class="mb-3">
-                  <%= form.label :address_2, "地址 2", class: "form-label" %>
-                  <%= form.text_field :address_2, class: "form-control" %>
-                </div>
-                
-                <div class="row">
-                  <div class="col-md-6">
-                    <%= form.label :city, "城市", class: "form-label" %>
-                    <%= form.text_field :city, class: "form-control" %>
-                  </div>
-                  <div class="col-md-6">
-                    <%= form.label :state, "地區/州/省份", class: "form-label" %>
-                    <%= form.text_field :state, class: "form-control" %>
-                  </div>
-                </div>
-                
-                <div class="row mt-3">
-                  <div class="col-md-6">
-                    <%= form.label :postal_code, "郵政編號", class: "form-label" %>
-                    <%= form.text_field :postal_code, class: "form-control" %>
-                  </div>
-                  <div class="col-md-6">
-                    <%= form.label :country, "國家", class: "form-label" %>
-                    <%= form.text_field :country, class: "form-control" %>
-                  </div>
-                </div>
+              <div class="card-body">
+                <%= f.text_area :personal_note, rows: 5, class: "form-control" %>
               </div>
             </div>
-            
-            <div class="row mt-4">
-              <div class="col-md-6">
-                <h6 class="border-bottom pb-2">會員資訊</h6>
-                
-                <div class="mb-3 form-check">
-                  <%= form.check_box :is_member, class: "form-check-input" %>
-                  <%= form.label :is_member, "會員", class: "form-check-label" %>
-                </div>
-                
-                <div class="mb-3">
-                  <%= form.label :membership_level, "會員級別", class: "form-label" %>
-                  <%= form.text_field :membership_level, class: "form-control" %>
-                </div>
-                
-                <div class="mb-3">
-                  <%= form.label :membership_expiry_date, "會員有效期", class: "form-label" %>
-                  <%= form.date_field :membership_expiry_date, class: "form-control" %>
-                </div>
-                
-                <div class="mb-3 form-check">
-                  <%= form.check_box :blacklisted, class: "form-check-input" %>
-                  <%= form.label :blacklisted, "黑名單", class: "form-check-label" %>
-                </div>
+
+            <!-- 健康問卷 -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h6 class="mb-0">健康問卷資料（客戶填寫）</h6>
               </div>
-              
-              <div class="col-md-6">
-                <h6 class="border-bottom pb-2">行銷訂閱設定</h6>
-                
-                <div class="mb-3 form-check">
-                  <%= form.check_box :accept_email_marketing, class: "form-check-input" %>
-                  <%= form.label :accept_email_marketing, "接受電郵優惠宣傳", class: "form-check-label" %>
-                </div>
-                
-                <div class="mb-3 form-check">
-                  <%= form.check_box :accept_sms_marketing, class: "form-check-input" %>
-                  <%= form.label :accept_sms_marketing, "接受簡訊優惠宣傳", class: "form-check-label" %>
-                </div>
-                
-                <div class="mb-3 form-check">
-                  <%= form.check_box :accept_fb_marketing, class: "form-check-input" %>
-                  <%= form.label :accept_fb_marketing, "接受 FB 優惠宣傳", class: "form-check-label" %>
-                </div>
-                
-                <div class="mb-3 form-check">
-                  <%= form.check_box :accept_line_marketing, class: "form-check-input" %>
-                  <%= form.label :accept_line_marketing, "接受 LINE 優惠宣傳", class: "form-check-label" %>
-                </div>
-                
-                <div class="mb-3 form-check">
-                  <%= form.check_box :accept_whatsapp_marketing, class: "form-check-input" %>
-                  <%= form.label :accept_whatsapp_marketing, "接受 WhatsApp 優惠宣傳", class: "form-check-label" %>
-                </div>
+
+              <div class="card-body">
+                <%= f.fields_for :health_questionnaire do |hq| %>
+
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                      <%= hq.label :height_cm, "身高 (cm)" %>
+                      <%= hq.number_field :height_cm, class: "form-control" %>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                      <%= hq.label :weight_kg, "體重 (kg)" %>
+                      <%= hq.number_field :weight_kg, step: 0.1, class: "form-control" %>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                      <%= hq.label :body_fat_percentage, "體脂 (%)" %>
+                      <%= hq.number_field :body_fat_percentage, class: "form-control" %>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= hq.label :work_type, "工作型態" %>
+                    <%= hq.text_field :work_type, class: "form-control", placeholder: "久坐 / 站立 / 走動" %>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= hq.label :marital_status, "婚姻狀況" %>
+                    <%= hq.text_field :marital_status, class: "form-control" %>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <%= hq.label :sleep_time, "睡眠時間" %>
+                      <%= hq.text_field :sleep_time, class: "form-control" %>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                      <%= hq.label :wake_time, "起床時間" %>
+                      <%= hq.text_field :wake_time, class: "form-control" %>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= hq.label :water_intake_ml, "一天喝多少水 (ml)" %>
+                    <%= hq.number_field :water_intake_ml, class: "form-control" %>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= hq.label :diet_type, "平日飲食型態（多選）" %>
+                    <%= hq.select :diet_type, 
+                        ["三餐正常", "兩餐為主", "自煮", "外食", "其他"],
+                        {},
+                        { multiple: true, class: "form-select select2-multi" } %>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= hq.label :previous_weight_loss_methods, "過往瘦身方式" %>
+                    <%= hq.text_area :previous_weight_loss_methods, rows: 3, class: "form-control" %>
+                  </div>
+
+                <% end %>
               </div>
             </div>
-            
-            <div class="row mt-4">
-              <div class="col-md-12">
-                <h6 class="border-bottom pb-2">備註和標籤</h6>
-                
-                <div class="mb-3">
-                  <%= form.label :tags, "標籤", class: "form-label" %>
-                  <%= form.text_field :tags, class: "form-control" %>
-                </div>
-                
-                <div class="mb-3">
-                  <%= form.label :notes, "備註", class: "form-label" %>
-                  <%= form.text_area :notes, class: "form-control", rows: 3 %>
-                </div>
+
+            <!-- 健康分析（營養師用） -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h6 class="mb-0">健康分析（後台使用）</h6>
+              </div>
+
+              <div class="card-body">
+                <%= f.fields_for :health_assessment do |ha| %>
+
+                  <div class="mb-3">
+                    <%= ha.label :interaction_level, "互動程度" %>
+                    <%= ha.select :interaction_level, 
+                          [["高", "高"], ["中", "中"], ["低", "低"]],
+                          { include_blank: "請選擇互動程度" },
+                          class: "form-select select2-single" %>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= ha.label :main_health_goal, "主要健康目標" %>
+                    <%= ha.text_area :main_health_goal, rows: 3, class: "form-control" %>
+                  </div>
+
+                  <!-- 推薦產品：Tagify -->
+                  <div class="mb-3">
+                    <label class="form-label">推薦產品（多選）</label>
+                    <input 
+                      id="product-tagify"
+                      name="shopline_customer[health_assessment_attributes][product_ids]"
+                      class="form-control"
+                      placeholder="選擇推薦產品..."
+                      value="<%= @shopline_customer.health_assessment&.products&.pluck(:name)&.join(',') %>"
+                    >
+                  </div>
+
+                  <div class="mb-3">
+                    <%= ha.label :summary_notes, "營養師摘要" %>
+                    <%= ha.text_area :summary_notes, rows: 3, class: "form-control" %>
+                  </div>
+
+                <% end %>
               </div>
             </div>
-            
+
+            <!-- 儲存按鈕 -->
             <div class="mt-4">
-              <%= form.submit "儲存變更", class: "btn btn-primary" %>
+              <%= f.submit "儲存變更", class: "btn btn-primary" %>
               <%= link_to "取消", admin_shopline_customer_path(@shopline_customer), class: "btn btn-secondary" %>
             </div>
+
           <% end %>
+
         </div>
       </div>
+
     </div>
   </div>
+
 </div>
+
+
+<!-- Tagify 初始化 -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+
+    // 初始化 Select2 多選（飲食類型）
+    $('.select2-multi').select2({
+      width: "100%",
+      placeholder: "請選擇飲食型態",
+      allowClear: true
+    });
+
+    $('.select2-single').select2({
+      width: "100%",
+      placeholder: "請選擇互動程度",
+      minimumResultsForSearch: Infinity  // 隱藏搜尋框
+    });
+
+
+    // 推薦產品列表（Tagify選項來源）
+    const allProducts = <%= raw Product.pluck(:name).to_json %>;
+
+    const productInput = document.querySelector("#product-tagify");
+
+    if (productInput) {
+      new Tagify(productInput, {
+        whitelist: allProducts,
+        maxTags: 10,
+        dropdown: {
+          enabled: 1,
+          maxItems: 10,
+          closeOnSelect: false
+        }
+      });
+    }
+  });
+</script>

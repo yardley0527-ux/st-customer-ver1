@@ -38,7 +38,12 @@
             
             <div class="d-flex justify-content-between">
               <%= link_to '取消', admin_dashboard_path, class: 'btn btn-secondary' %>
-              <%= submit_tag '開始匯入', class: 'btn btn-primary', data: { disable_with: '處理中...' } %>
+              <button type="submit"
+                      class="btn btn-primary btn-pills fw-500"
+                      data-disable-with="處理中...">
+                開始匯入
+              </button>
+
             </div>
           <% end %>
         </div>
