@@ -77,6 +77,9 @@ class Admin::ShoplineCustomersController < ApplicationController
           :sleep_time, :wake_time,
           :water_intake_ml,
           :previous_weight_loss_methods,
+          :purchase_reason,           
+          :currently_weight_loss,    
+          :diet_type_other,           
           diet_type: []
         ],
     

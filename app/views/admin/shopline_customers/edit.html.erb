@@ -1,3 +1,4 @@
+<!-- app/views/admin/shopline_customers/edit.html.erb -->
 <% if @shopline_customer.errors.any? %>
   <div class="alert alert-danger">
     <ul>
@@ -8,12 +9,9 @@
   </div>
 <% end %>
 
-
 <div class="container-fluid">
-
   <div class="row">
     <div class="col-12">
-
       <div class="card mb-3">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="card-title mb-0">編輯客戶備註與健康資料</h5>
@@ -23,9 +21,7 @@
         </div>
 
         <div class="card-body">
-
           <%= form_with(model: [:admin, @shopline_customer], local: true) do |f| %>
-
             <% if @shopline_customer.errors.any? %>
               <div class="alert alert-danger">
                 <h6><%= pluralize(@shopline_customer.errors.count, "error") %> 導致無法儲存：</h6>
@@ -73,25 +69,52 @@
                     </div>
                   </div>
 
-                  <div class="mb-3">
-                    <%= hq.label :work_type, "工作型態" %>
-                    <%= hq.text_field :work_type, class: "form-control", placeholder: "久坐 / 站立 / 走動" %>
-                  </div>
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <%= hq.label :work_type, "工作型態" %>
+                      <%= hq.select :work_type,
+                          [["久坐辦公","久坐辦公"],["站立工作","站立工作"],["常常走動","常常走動"]],
+                          { include_blank: "請選擇" },
+                          class: "form-select select2-single" %>
+                    </div>
 
-                  <div class="mb-3">
-                    <%= hq.label :marital_status, "婚姻狀況" %>
-                    <%= hq.text_field :marital_status, class: "form-control" %>
+                    <div class="col-md-6 mb-3">
+                      <%= hq.label :marital_status, "婚姻狀況" %>
+                      <%= hq.select :marital_status,
+                          [["未婚","未婚"],["已婚","已婚"],["其他","其他"]],
+                          { include_blank: "請選擇" },
+                          class: "form-select select2-single" %>
+                    </div>
                   </div>
 
                   <div class="row">
                     <div class="col-md-6 mb-3">
-                      <%= hq.label :sleep_time, "睡眠時間" %>
-                      <%= hq.text_field :sleep_time, class: "form-control" %>
+                      <%= hq.label :birthdate, "出生年月" %>
+                      <%= hq.date_field :birthdate, class: "form-control" %>
+                      <% if hq.object&.birthdate.present? %>
+                        <small class="text-muted">年齡：約 <%= ((Time.zone.today - hq.object.birthdate).to_i / 365.25).floor %> 歲</small>
+                      <% end %>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <%= hq.label :family_members_count, "同住者人數" %>
+                      <%= hq.number_field :family_members_count, min: 0, class: "form-control" %>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= hq.label :family_members_details, "同住者家庭成員（分別幾歲）" %>
+                    <%= hq.text_area :family_members_details, rows: 2, class: "form-control", placeholder: "例：老公 35、女兒 8、媽媽 60…" %>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <%= hq.label :sleep_time, "睡覺時間" %>
+                      <%= hq.text_field :sleep_time, class: "form-control", placeholder: "例：23:30" %>
                     </div>
 
                     <div class="col-md-6 mb-3">
                       <%= hq.label :wake_time, "起床時間" %>
-                      <%= hq.text_field :wake_time, class: "form-control" %>
+                      <%= hq.text_field :wake_time, class: "form-control", placeholder: "例：07:30" %>
                     </div>
                   </div>
 
@@ -102,10 +125,56 @@
 
                   <div class="mb-3">
                     <%= hq.label :diet_type, "平日飲食型態（多選）" %>
-                    <%= hq.select :diet_type, 
-                        ["三餐正常", "兩餐為主", "自煮", "外食", "其他"],
-                        {},
-                        { multiple: true, class: "form-select select2-multi" } %>
+                    <%= hq.select :diet_type,
+                          ["三餐正常","兩餐為主","自煮","外食","其他"],
+                          {},
+                          { multiple: true, class: "form-select select2-multi", id: "diet-type-select" } %>
+                  </div>
+
+                  <div class="mb-3" id="diet-type-other-wrapper" style="<%= hq.object&.diet_type&.include?('其他') ? '' : 'display:none;' %>">
+                    <%= hq.label :diet_type_other, "其他飲食型態（請填寫）" %>
+                    <%= hq.text_field :diet_type_other, class: "form-control", placeholder: "請描述您的其他飲食型態" %>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label d-block">補充資訊</label>
+                    <div class="col-md-4">
+                      <div class="form-check">
+                        <%= hq.check_box :take_chinese_medicine, class: "form-check-input" %>
+                        <%= hq.label :take_chinese_medicine, "有在吃中藥", class: "form-check-label" %>
+                      </div>
+                    </div>
+                  
+                    <div class="col-md-4">
+                      <div class="form-check">
+                        <%= hq.check_box :bought_our_products, class: "form-check-input" %>
+                        <%= hq.label :bought_our_products, "買過本品牌產品", class: "form-check-label" %>
+                      </div>
+                    </div>
+                  
+                    <div class="col-md-4">
+                      <div class="form-check">
+                        <%= hq.check_box :bought_other_supplements, class: "form-check-input" %>
+                        <%= hq.label :bought_other_supplements, "買過他牌保健品", class: "form-check-label" %>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label d-block">現在是否在減肥？</label>
+                    <div class="form-check form-check-inline">
+                      <%= hq.radio_button :currently_weight_loss, true, id: "wl-yes", class: "form-check-input" %>
+                      <label class="form-check-label" for="wl-yes">是</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <%= hq.radio_button :currently_weight_loss, false, id: "wl-no", class: "form-check-input" %>
+                      <label class="form-check-label" for="wl-no">否</label>
+                    </div>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <%= hq.label :purchase_reason, "購買的主要原因" %>
+                    <%= hq.text_area :purchase_reason, rows: 3, class: "form-control" %>
                   </div>
 
                   <div class="mb-3">
@@ -125,11 +194,10 @@
 
               <div class="card-body">
                 <%= f.fields_for :health_assessment do |ha| %>
-
                   <div class="mb-3">
                     <%= ha.label :interaction_level, "互動程度" %>
-                    <%= ha.select :interaction_level, 
-                          [["高", "高"], ["中", "中"], ["低", "低"]],
+                    <%= ha.select :interaction_level,
+                          [["高","高"],["中","中"],["低","低"]],
                           { include_blank: "請選擇互動程度" },
                           class: "form-select select2-single" %>
                   </div>
@@ -142,20 +210,18 @@
                   <!-- 推薦產品：Tagify -->
                   <div class="mb-3">
                     <label class="form-label">推薦產品（多選）</label>
-                    <input 
+                    <input
                       id="product-tagify"
                       name="shopline_customer[health_assessment_attributes][product_ids]"
                       class="form-control"
                       placeholder="選擇推薦產品..."
-                      value="<%= @shopline_customer.health_assessment&.products&.pluck(:name)&.join(',') %>"
-                    >
+                      value="<%= @shopline_customer.health_assessment&.products&.pluck(:name)&.join(',') %>">
                   </div>
 
                   <div class="mb-3">
                     <%= ha.label :summary_notes, "營養師摘要" %>
                     <%= ha.text_area :summary_notes, rows: 3, class: "form-control" %>
                   </div>
-
                 <% end %>
               </div>
             </div>
@@ -165,23 +231,16 @@
               <%= f.submit "儲存變更", class: "btn btn-primary" %>
               <%= link_to "取消", admin_shopline_customer_path(@shopline_customer), class: "btn btn-secondary" %>
             </div>
-
           <% end %>
-
         </div>
       </div>
-
     </div>
   </div>
-
 </div>
 
-
-<!-- Tagify 初始化 -->
+<!-- Tagify / Select2 初始化 & 動態顯示『其他』 -->
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-
-    // 初始化 Select2 多選（飲食類型）
     $('.select2-multi').select2({
       width: "100%",
       placeholder: "請選擇飲食型態",
@@ -190,26 +249,30 @@
 
     $('.select2-single').select2({
       width: "100%",
-      placeholder: "請選擇互動程度",
-      minimumResultsForSearch: Infinity  // 隱藏搜尋框
+      placeholder: "請選擇",
+      minimumResultsForSearch: Infinity
     });
 
-
-    // 推薦產品列表（Tagify選項來源）
     const allProducts = <%= raw Product.pluck(:name).to_json %>;
-
     const productInput = document.querySelector("#product-tagify");
-
     if (productInput) {
       new Tagify(productInput, {
         whitelist: allProducts,
         maxTags: 10,
-        dropdown: {
-          enabled: 1,
-          maxItems: 10,
-          closeOnSelect: false
-        }
+        dropdown: { enabled: 1, maxItems: 10, closeOnSelect: false }
       });
+    }
+
+    // why: 僅在選到「其他」時要求補充描述，避免無意義的空值
+    const dietSelect = document.getElementById("diet-type-select");
+    const otherWrapper = document.getElementById("diet-type-other-wrapper");
+    function toggleOther() {
+      const values = $(dietSelect).val() || [];
+      otherWrapper.style.display = values.includes("其他") ? "" : "none";
+    }
+    if (dietSelect) {
+      $(dietSelect).on("change", toggleOther);
+      toggleOther();
     }
   });
 </script>

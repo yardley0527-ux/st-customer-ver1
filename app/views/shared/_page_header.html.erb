@@ -3,7 +3,7 @@
   <!-- we need this logo when user switches to nav-function-top -->
   <% if Rails.configuration.app_layout_shortcut %>
     <!-- DOC: nav menu layout change shortcut -->
-    <div class="hidden-md-down dropdown-icon-menu position-relative">
+    <div class="dropdown-icon-menu position-relative">
       <%= link_to '#', class: 'header-btn btn js-waves-off', data: {action: 'toggle', class: 'nav-function-hidden', title: 'Hide Navigation'} do %>
         <i class="ni ni-menu"></i>
       <% end %>
@@ -36,7 +36,7 @@
   <div class="ml-auto d-flex">
 
     <!-- activate app search icon (mobile) -->
-    <div class="hidden-sm-up">
+    <div class="hidden-sm-">
       <a href="#" class="header-icon" data-action="toggle" data-class="mobile-search-on" data-focus="search-field" title="Search">
         <i class="fal fa-search"></i>
       </a>
