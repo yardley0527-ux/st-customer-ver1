@@ -89,13 +89,6 @@
 
                   <div class="row">
                     <div class="col-md-6 mb-3">
-                      <%= hq.label :birthdate, "出生年月" %>
-                      <%= hq.date_field :birthdate, class: "form-control" %>
-                      <% if hq.object&.birthdate.present? %>
-                        <small class="text-muted">年齡：約 <%= ((Time.zone.today - hq.object.birthdate).to_i / 365.25).floor %> 歲</small>
-                      <% end %>
-                    </div>
-                    <div class="col-md-6 mb-3">
                       <%= hq.label :family_members_count, "同住者人數" %>
                       <%= hq.number_field :family_members_count, min: 0, class: "form-control" %>
                     </div>
@@ -108,13 +101,13 @@
 
                   <div class="row">
                     <div class="col-md-6 mb-3">
-                      <%= hq.label :sleep_time, "睡覺時間" %>
-                      <%= hq.text_field :sleep_time, class: "form-control", placeholder: "例：23:30" %>
+                      <%= hq.label :wake_time, "起床時間" %>
+                      <%= hq.text_field :wake_time, class: "form-control", placeholder: "例：07:30" %>
                     </div>
 
                     <div class="col-md-6 mb-3">
-                      <%= hq.label :wake_time, "起床時間" %>
-                      <%= hq.text_field :wake_time, class: "form-control", placeholder: "例：07:30" %>
+                      <%= hq.label :sleep_time, "睡覺時間" %>
+                      <%= hq.text_field :sleep_time, class: "form-control", placeholder: "例：23:30" %>
                     </div>
                   </div>
 
