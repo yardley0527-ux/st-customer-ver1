@@ -1,20 +1,19 @@
 <header class="page-header" role="banner">
-
   <!-- we need this logo when user switches to nav-function-top -->
   <% if Rails.configuration.app_layout_shortcut %>
     <!-- DOC: nav menu layout change shortcut -->
     <div class="dropdown-icon-menu position-relative">
-      <%= link_to '#', class: 'header-btn btn js-waves-off', data: {action: 'toggle', class: 'nav-function-hidden', title: 'Hide Navigation'} do %>
+      <%= link_to '#', class: 'header-btn btn js-waves-off', data: {action: 'toggle', target: 'html', class: 'nav-function-hidden', title: 'Hide Navigation'} do %>
         <i class="ni ni-menu"></i>
       <% end %>
       <ul>
         <li>
-          <%= link_to '#', class: 'btn js-waves-off', data: {action: 'toggle', class: 'nav-function-minify', title: 'Minify Navigation'} do %>
+          <%= link_to '#', class: 'btn js-waves-off', data: {action: 'toggle', target: 'html', class: 'nav-function-minify', title: 'Minify Navigation'} do %>
             <i class="ni ni-minify-nav"></i>
           <% end %>
         </li>
         <li>
-          <%= link_to '#', class: 'btn js-waves-off', data: {action: 'toggle', class: 'nav-function-fixed', title: 'Lock Navigation'} do %>
+          <%= link_to '#', class: 'btn js-waves-off', data: {action: 'toggle', target: 'html', class: 'nav-function-fixed', title: 'Lock Navigation'} do %>
             <i class="ni ni-lock-nav"></i>
           <% end %>
         </li>
@@ -36,7 +35,7 @@
   <div class="ml-auto d-flex">
 
     <!-- activate app search icon (mobile) -->
-    <div class="hidden-sm-">
+    <div class="hidden-sm-up">
       <a href="#" class="header-icon" data-action="toggle" data-class="mobile-search-on" data-focus="search-field" title="Search">
         <i class="fal fa-search"></i>
       </a>

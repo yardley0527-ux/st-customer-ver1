@@ -66,5 +66,77 @@
 <script src="https://unpkg.com/@yaireo/tagify"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+<%= render 'shared/scripts_base_plugins' %>   <!-- SmartAdmin / app.bundle.js -->
+<%= yield :scripts_block %>
+
+<script>
+(function shortcutToggles(){
+  function bindButtons(){
+    var btns = document.querySelectorAll('.dropdown-icon-menu [data-action="toggle"]');
+    btns.forEach(function(btn){
+      if (btn.__saBound) return;
+      btn.__saBound = function(e){
+        e.preventDefault();
+        var html = document.documentElement;
+        if (window.innerWidth < 992) {
+          html.classList.toggle('mobile-nav-on');       // 手機：開/關
+        } else {
+          var k = btn.dataset.class;
+          var t = btn.dataset.target || 'html';
+          var el = document.querySelector(t);
+          if (el && k) el.classList.toggle(k);          // 桌機：原行為
+        }
+      };
+      btn.addEventListener('click', btn.__saBound, true); // 用 capture 防止被攔
+    });
+    console.log('[shortcut] bound', btns.length);
+  }
+
+  function bindOverlayClose(){
+    var ov = document.querySelector('.page-content-overlay');
+    if (!ov || ov.__saBound) return;
+    ov.__saBound = true;
+    ov.addEventListener('click', function(){
+      document.documentElement.classList.remove('mobile-nav-on'); // 點遮罩關閉
+    }, true);
+  }
+
+  function bindEsc(){
+    if (document.__saEsc) return;
+    document.__saEsc = true;
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') document.documentElement.classList.remove('mobile-nav-on');
+    });
+  }
+
+  function bindResizeGuard(){
+    if (window.__saResize) return;
+    var tid;
+    window.__saResize = true;
+    window.addEventListener('resize', function(){
+      clearTimeout(tid);
+      tid = setTimeout(function(){
+        if (window.innerWidth >= 992) document.documentElement.classList.remove('mobile-nav-on');
+      }, 120);
+    });
+  }
+
+  function init(){
+    bindButtons();
+    bindOverlayClose();
+    bindEsc();
+    bindResizeGuard();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('turbolinks:load', init);
+  document.addEventListener('turbo:load', init);
+})();
+</script>
+
+
+
 </body>
 </html>
+
+
