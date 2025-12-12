@@ -1,0 +1,147 @@
+# config/deploy_preflight.yml
+fail_on_extra: false  # true=多餘欄位也視為錯誤；false=只警告
+
+tables:
+  admins:
+    - id
+    - email
+    - password_digest
+    - created_at
+    - updated_at
+
+  products:
+    - id
+    - name
+    - category
+    - status
+    - created_at
+    - updated_at
+
+  shopline_customers:
+    - id
+    - shopline_id
+    - full_name
+    - email
+    - joined_at
+    - join_source
+    - language
+    - order_count
+    - total_amount
+    - issued_shopping_credits
+    - deducted_shopping_credits
+    - used_shopping_credits
+    - current_shopping_credits
+    - issued_points
+    - deducted_points
+    - used_points
+    - current_points
+    - is_member
+    - member_registered_at
+    - member_registration_source
+    - facebook_id
+    - line_id
+    - blacklisted
+    - has_password
+    - accept_email_marketing
+    - accept_sms_marketing
+    - accept_fb_marketing
+    - accept_line_marketing
+    - accept_whatsapp_marketing
+    - last_login_at
+    - phone
+    - country_code
+    - mobile_phone
+    - recipient_name
+    - recipient_phone
+    - address_1
+    - address_2
+    - city
+    - state
+    - postal_code
+    - country
+    - membership_level
+    - membership_expiry_date
+    - gender
+    - birthdate
+    - instagram_account
+    - tags
+    - notes
+    - utm_source
+    - utm_medium
+    - utm_source_medium
+    - utm_campaign
+    - utm_term
+    - utm_content
+    - utm_clicked_at
+    - referrer_name
+    - referrer_email
+    - referrer_phone
+    - created_at
+    - updated_at
+    - personal_note
+
+  shopline_customer_health_assessments:
+    - id
+    - shopline_customer_id
+    - interaction_level
+    - main_health_goal
+    - summary_notes
+    - created_at
+    - updated_at
+
+  health_assessment_products:
+    - id
+    - shopline_customer_health_assessment_id
+    - product_id
+    - created_at
+    - updated_at
+
+  shopline_customer_health_questionnaires:
+    - id
+    - shopline_customer_id
+    - height_cm
+    - weight_kg
+    - body_fat_percentage
+    - work_type
+    - birthdate
+    - marital_status
+    - family_members_count
+    - family_members_details
+    - sleep_time
+    - wake_time
+    - water_intake_ml
+    - diet_type
+    - take_chinese_medicine
+    - bought_our_products
+    - bought_other_supplements
+    - previous_weight_loss_methods
+    - created_at
+    - updated_at
+    - purchase_reason
+    - currently_weight_loss
+    - diet_type_other
+
+  shopline_orders:
+    - id
+    - order_number
+    - product_name
+    - email
+    - instagram_account
+    - payment_status
+    - order_status
+    - total_amount
+    - quantity
+    - customer_name
+    - payment_method
+    - order_date
+    - utm_source
+    - utm_medium
+    - utm_source_medium
+    - utm_campaign
+    - utm_term
+    - utm_content
+    - utm_clicked_at
+    - membership_level
+    - shopline_customer_id
+    - created_at
+    - updated_at
