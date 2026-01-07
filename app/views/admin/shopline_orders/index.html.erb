@@ -1,22 +1,24 @@
+<!-- app/views/admin/shopline_orders/index.html.erb -->
 <div class="row">
   <div class="col-xl-12">
     <div id="panel-1" class="panel">
       <div class="panel-hdr">
         <h2>
-          訂單管理 <span class="fw-300"><i>2024年1月數據</i></span>
+          訂單管理 <span class="fw-300"><i><%= @month_display.presence || "2024年1月數據" %></i></span>
         </h2>
-        <div class="panel-toolbar">
+        <div class="panel-toolbar d-flex align-items-center">
           <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="摺疊"></button>
           <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="全屏"></button>
         </div>
       </div>
+
       <div class="panel-container show">
         <div class="panel-content">
-          <!-- 訂單統計小卡片 -->
+          <!-- 訂單統計小卡片：原本即具 RWD -->
           <div class="row mb-3">
             <div class="col-sm-6 col-xl-3">
               <div class="p-3 bg-primary-300 rounded overflow-hidden position-relative text-white mb-g">
-                <div class="">
+                <div>
                   <h3 class="display-4 d-block l-h-n m-0 fw-500">
                     <%= @orders_count %>
                     <small class="m-0 l-h-n">訂單總數</small>
@@ -27,7 +29,7 @@
             </div>
             <div class="col-sm-6 col-xl-3">
               <div class="p-3 bg-warning-400 rounded overflow-hidden position-relative text-white mb-g">
-                <div class="">
+                <div>
                   <h3 class="display-4 d-block l-h-n m-0 fw-500">
                     <%= @customer_count %>
                     <small class="m-0 l-h-n">消費客戶數</small>
@@ -38,7 +40,7 @@
             </div>
             <div class="col-sm-6 col-xl-3">
               <div class="p-3 bg-success-200 rounded overflow-hidden position-relative text-white mb-g">
-                <div class="">
+                <div>
                   <h3 class="display-4 d-block l-h-n m-0 fw-500">
                     <%= @products_count %>
                     <small class="m-0 l-h-n">售出產品數</small>
@@ -49,116 +51,92 @@
             </div>
             <div class="col-sm-6 col-xl-3">
               <div class="p-3 bg-info-200 rounded overflow-hidden position-relative text-white mb-g">
-                <div class="">
+                <div>
                   <h3 class="display-4 d-block l-h-n m-0 fw-500">
                     NT$<%= number_with_delimiter(@total_amount) %>
-                    <small class="m-0 l-h-n">2024年1月總營收</small>
+                    <small class="m-0 l-h-n"><%= @month_display.presence || "2024年1月" %>總營收</small>
                   </h3>
                 </div>
                 <i class="fal fa-dollar-sign position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
               </div>
             </div>
           </div>
-          
-          <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            <%= @month_display %>
-            <span class="caret"></span>
-          </button>
-          <div class="dropdown-menu">
-            <% @available_months.each do |ym| %>
-              <% if ym.present? && ym.length >= 6 %>
-                <% year = ym[0..3] %>
-                <% month = ym[4..5] %>
-                <%= link_to "#{year}年#{month}月", admin_shopline_orders_path(month: ym, order_status: params[:order_status], payment_status: params[:payment_status], search: params[:search]), 
-                           class: "dropdown-item #{ym == @selected_month ? 'active' : ''}" %>
-              <% end %>
-            <% end %>
-          </div>
-          
-          <!-- 篩選面板 -->
-          <div class="panel-tag">
-            <%= form_with url: admin_shopline_orders_path, method: :get, class: "form-inline" do |f| %>
-              <div class="form-group mr-2 mb-2">
-                <%= f.select :order_status, 
-                  options_for_select([
-                    ["所有狀態", ""], 
-                    ["已完成", "已完成"], 
-                    ["處理中", "處理中"], 
-                    ["待出貨", "待出貨"], 
-                    ["已取消", "已取消"]
-                  ], selected: params[:order_status]), 
-                  {}, { class: "form-control" } %>
-              </div>
-              <div class="form-group mr-2 mb-2">
-                <%= f.select :payment_status, 
-                  options_for_select([
-                    ["所有付款狀態", ""], 
-                    ["已付款", "已付款"], 
-                    ["未付款", "未付款"], 
-                    ["已退款", "已退款"]
-                  ], selected: params[:payment_status]), 
-                  {}, { class: "form-control" } %>
-              </div>
-              <div class="form-group mr-2 mb-2">
-                <%= f.text_field :search, value: params[:search], placeholder: "訂單號碼/客戶/電郵/商品", class: "form-control" %>
-              </div>
-              <%= f.submit "搜尋", class: "btn btn-primary mr-2 mb-2" %>
-              <%= link_to "重置", admin_shopline_orders_path, class: "btn btn-outline-secondary mb-2" %>
-              <button type="button" class="btn btn-outline-primary mb-2 ml-auto" data-toggle="collapse" data-target="#advancedFilterOptions">
-                <i class="fal fa-filter mr-1"></i> 進階篩選
-              </button>
-            <% end %>
-            
-            <div class="collapse mt-3" id="advancedFilterOptions">
-              <%= form_with url: admin_shopline_orders_path, method: :get, class: "form-inline" do |f| %>
-                <div class="form-group mr-2 mb-2">
-                  <label class="mr-2">金額範圍</label>
-                  <%= f.number_field :min_amount, value: params[:min_amount], placeholder: "最小金額", class: "form-control" %>
-                  <span class="mx-2">至</span>
-                  <%= f.number_field :max_amount, value: params[:max_amount], placeholder: "最大金額", class: "form-control" %>
-                </div>
-                <div class="form-group mr-2 mb-2">
-                  <%= f.select :payment_method, 
-                    options_for_select([
-                      ["所有付款方式", ""], 
-                      ["信用卡付款", "信用卡付款"], 
-                      ["Apple Pay", "Apple Pay"], 
-                      ["銀行轉帳／ATM", "銀行轉帳／ATM"]
-                    ], selected: params[:payment_method]), 
-                    {}, { class: "form-control" } %>
-                </div>
-                <div class="form-group mr-2 mb-2">
-                  <%= f.select :product_category, 
-                    options_for_select([
-                      ["所有產品", ""], 
-                      ["比利時超代謝精華錠", "比利時超代謝精華錠"], 
-                      ["神經醯胺素顏粉", "神經醯胺素顏粉"],
-                      ["法國水胜肽天絲潤透面膜", "法國水胜肽天絲潤透面膜"]
-                    ], selected: params[:product_category]), 
-                    {}, { class: "form-control" } %>
-                </div>
-                <%= f.submit "應用篩選", class: "btn btn-info mb-2" %>
+
+          <!-- 月份下拉：行動裝置靠左即可 -->
+          <div class="dropdown mb-2">
+            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              <%= @month_display %>
+              <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu">
+              <% @available_months.each do |ym| %>
+                <% if ym.present? && ym.length >= 6 %>
+                  <% year = ym[0..3]; month = ym[4..5] %>
+                  <%= link_to "#{year}年#{month}月", admin_shopline_orders_path(month: ym, order_status: params[:order_status], payment_status: params[:payment_status], search: params[:search]), class: "dropdown-item #{ym == @selected_month ? 'active' : ''}" %>
+                <% end %>
               <% end %>
             </div>
           </div>
-          
-          <!-- 訂單表格 -->
+
+          <!-- 篩選面板：允許換行堆疊 -->
+          <div class="panel-tag">
+            <%= form_with url: admin_shopline_orders_path, method: :get, class: "form-inline d-flex flex-wrap gap-2" do |f| %>
+              <div class="form-group mr-2 mb-2">
+                <%= f.select :order_status,
+                  options_for_select([["所有狀態",""],["已完成","已完成"],["處理中","處理中"],["待出貨","待出貨"],["已取消","已取消"]], selected: params[:order_status]),
+                  {}, { class: "form-control" } %>
+              </div>
+              <div class="form-group mr-2 mb-2">
+                <%= f.select :payment_status,
+                  options_for_select([["所有付款狀態",""],["已付款","已付款"],["未付款","未付款"],["已退款","已退款"]], selected: params[:payment_status]),
+                  {}, { class: "form-control" } %>
+              </div>
+              <div class="form-group mr-2 mb-2 flex-grow-1" style="min-width:220px;">
+                <%= f.text_field :search, value: params[:search], placeholder: "訂單號碼/客戶/電郵/商品", class: "form-control w-100" %>
+              </div>
+              <div class="w-100 d-block d-sm-none"></div> <!-- xs 斷行 -->
+              <%= f.submit "搜尋", class: "btn btn-primary mr-2 mb-2" %>
+              <%= link_to "重置", admin_shopline_orders_path, class: "btn btn-outline-secondary mb-2 mr-2" %>
+              <button type="button" class="btn btn-outline-primary mb-2 ml-sm-auto" data-toggle="collapse" data-target="#advancedFilterOptions">
+                <i class="fal fa-filter mr-1"></i> 進階篩選
+              </button>
+            <% end %>
+
+            <div class="collapse mt-3" id="advancedFilterOptions">
+              <%= form_with url: admin_shopline_orders_path, method: :get, class: "form-inline d-flex flex-wrap gap-2" do |f| %>
+                <div class="form-group mr-2 mb-2 d-flex align-items-center">
+                  <label class="mr-2">金額範圍</label>
+                  <%= f.number_field :min_amount, value: params[:min_amount], placeholder: "最小金額", class: "form-control", style: "max-width:150px" %>
+                  <span class="mx-2">至</span>
+                  <%= f.number_field :max_amount, value: params[:max_amount], placeholder: "最大金額", class: "form-control", style: "max-width:150px" %>
+                </div>
+                <div class="form-group mr-2 mb-2">
+                  <%= f.select :payment_method,
+                    options_for_select([["所有付款方式",""],["信用卡付款","信用卡付款"],["Apple Pay","Apple Pay"],["銀行轉帳／ATM","銀行轉帳／ATM"]], selected: params[:payment_method]),
+                    {}, { class: "form-control" } %>
+                </div>
+                <div class="form-group mr-2 mb-2">
+                  <%= f.select :product_category,
+                    options_for_select([["所有產品",""],["比利時超代謝精華錠","比利時超代謝精華錠"],["神經醯胺素顏粉","神經醯胺素顏粉"],["法國水胜肽天絲潤透面膜","法國水胜肽天絲潤透面膜"]], selected: params[:product_category]),
+                    {}, { class: "form-control" } %>
+                </div>
+                <%= f.submit "應用篩選", class: "btn btn-info mb-2 ml-sm-auto" %>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- 訂單狀態快捷 + 分組開關 -->
           <div class="row mb-3">
             <div class="col-12">
-              <div class="d-flex">
-                <div class="btn-group">
-                  <%= link_to "全部", admin_shopline_orders_path(params.permit(:search).merge(order_status: "")), 
-                    class: "btn #{params[:order_status].blank? ? 'btn-primary' : 'btn-outline-primary'}" %>
-                  <%= link_to "已完成", admin_shopline_orders_path(params.permit(:search).merge(order_status: "已完成")), 
-                    class: "btn #{params[:order_status] == '已完成' ? 'btn-success' : 'btn-outline-success'}" %>
-                  <%= link_to "處理中", admin_shopline_orders_path(params.permit(:search).merge(order_status: "處理中")), 
-                    class: "btn #{params[:order_status] == '處理中' ? 'btn-info' : 'btn-outline-info'}" %>
-                  <%= link_to "待出貨", admin_shopline_orders_path(params.permit(:search).merge(order_status: "待出貨")), 
-                    class: "btn #{params[:order_status] == '待出貨' ? 'btn-warning' : 'btn-outline-warning'}" %>
-                  <%= link_to "已取消", admin_shopline_orders_path(params.permit(:search).merge(order_status: "已取消")), 
-                    class: "btn #{params[:order_status] == '已取消' ? 'btn-danger' : 'btn-outline-danger'}" %>
+              <div class="d-flex flex-wrap align-items-center">
+                <div class="btn-group mb-2">
+                  <%= link_to "全部", admin_shopline_orders_path(params.permit(:search).merge(order_status: "")), class: "btn #{params[:order_status].blank? ? 'btn-primary' : 'btn-outline-primary'}" %>
+                  <%= link_to "已完成", admin_shopline_orders_path(params.permit(:search).merge(order_status: "已完成")), class: "btn #{params[:order_status] == '已完成' ? 'btn-success' : 'btn-outline-success'}" %>
+                  <%= link_to "處理中", admin_shopline_orders_path(params.permit(:search).merge(order_status: "處理中")), class: "btn #{params[:order_status] == '處理中' ? 'btn-info' : 'btn-outline-info'}" %>
+                  <%= link_to "待出貨", admin_shopline_orders_path(params.permit(:search).merge(order_status: "待出貨")), class: "btn #{params[:order_status] == '待出貨' ? 'btn-warning' : 'btn-outline-warning'}" %>
+                  <%= link_to "已取消", admin_shopline_orders_path(params.permit(:search).merge(order_status: "已取消")), class: "btn #{params[:order_status] == '已取消' ? 'btn-danger' : 'btn-outline-danger'}" %>
                 </div>
-                <div class="ml-auto">
+                <div class="ml-sm-auto mb-2">
                   <div class="frame-wrap">
                     <div class="custom-control custom-switch">
                       <input type="checkbox" class="custom-control-input" id="customSwitch1">
@@ -169,12 +147,12 @@
               </div>
             </div>
           </div>
-          
+
           <!-- 表格與操作區 -->
           <div class="row">
             <div class="col-12">
-              <div class="d-flex mb-3">
-                <div class="d-flex align-items-center">
+              <div class="d-flex flex-wrap mb-3">
+                <div class="d-flex align-items-center mb-2">
                   <div class="mr-2">
                     <input type="checkbox" id="select-all" class="custom-checkbox">
                   </div>
@@ -191,9 +169,9 @@
                     </div>
                   </div>
                 </div>
-                <div class="ml-auto d-flex align-items-center">
+                <div class="ml-sm-auto d-flex align-items-center mb-2">
                   <span class="mr-2">顯示 <%= @shopline_orders.size %> 筆，共 <%= @pagy.count %> 筆</span>
-                  <select class="form-control form-control-sm" style="width: 80px;" onchange="changePageSize(this.value)">
+                  <select class="form-control form-control-sm" style="width: 96px;" onchange="changePageSize(this.value)">
                     <option value="25" <%= params[:per_page] == '25' || params[:per_page].nil? ? 'selected' : '' %>>25</option>
                     <option value="50" <%= params[:per_page] == '50' ? 'selected' : '' %>>50</option>
                     <option value="100" <%= params[:per_page] == '100' ? 'selected' : '' %>>100</option>
@@ -201,148 +179,139 @@
                   </select>
                 </div>
               </div>
-              
-              <!-- 訂單表格 -->
-              <table id="dt-orders" class="table table-sm table-bordered table-hover table-striped w-100">
-                <thead class="bg-primary-500 text-white">
-                  <tr>
-                    <th style="width: 20px;"><input type="checkbox" id="select-all-checkbox"></th>
-                    <th style="width: 180px;">訂單編號 / 日期</th>
-                    <th style="width: 25%;">客戶 / 聯絡資訊</th>
-                    <th>商品 / 數量</th>
-                    <th style="width: 100px;">金額</th>
-                    <th style="width: 100px;">訂單狀態</th>
-                    <th style="width: 100px;">付款狀態</th>
-                    <th style="width: 100px;">操作</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% current_date = nil %>
-                  <% @shopline_orders.each do |order| %>
-                    <% 
-                    # 按日期分組顯示標題行
-                    order_date = order.order_date&.to_date
-                    if current_date != order_date 
-                      current_date = order_date 
-                    %>
-                      <tr class="bg-secondary-100 date-group-header">
-                        <td colspan="8" class="fw-500">
-                          <%= order_date&.strftime('%Y-%m-%d') %> (<%= I18n.l(order_date, format: '%A') if order_date %>)
+
+              <!-- ✅ 讓表格在小螢幕可水平滑動 -->
+              <div class="table-responsive">
+                <table id="dt-orders" class="table table-sm table-bordered table-hover table-striped w-100">
+                  <thead class="bg-primary-500 text-white">
+                    <tr>
+                      <th style="width: 20px;"><input type="checkbox" id="select-all-checkbox"></th>
+                      <th style="min-width: 160px;">訂單編號 / 日期</th>
+                      <th class="d-none d-md-table-cell" style="min-width: 220px;">客戶 / 聯絡資訊</th>
+                      <th style="min-width: 180px;">商品 / 數量</th>
+                      <th style="width: 100px;">金額</th>
+                      <th style="width: 100px;">訂單狀態</th>
+                      <th class="d-none d-lg-table-cell" style="width: 120px;">付款狀態</th>
+                      <th style="width: 100px;">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% current_date = nil %>
+                    <% @shopline_orders.each do |order| %>
+                      <% order_date = order.order_date&.to_date %>
+                      <% if current_date != order_date %>
+                        <% current_date = order_date %>
+                        <tr class="bg-secondary-100 date-group-header">
+                          <td colspan="8" class="fw-500">
+                            <%= order_date&.strftime('%Y-%m-%d') %> (<%= I18n.l(order_date, format: '%A') if order_date %>)
+                          </td>
+                        </tr>
+                      <% end %>
+
+                      <% order_status_class =
+                          case order.order_status
+                          when '已完成' then 'badge-success'
+                          when '處理中' then 'badge-info'
+                          when '待出貨' then 'badge-warning'
+                          when '已取消' then 'badge-danger'
+                          else 'badge-secondary' end
+                         payment_status_class =
+                          case order.payment_status
+                          when '已付款' then 'badge-success'
+                          when '未付款' then 'badge-danger'
+                          when '已退款' then 'badge-warning'
+                          else 'badge-secondary' end %>
+
+                      <tr>
+                        <td><input type="checkbox" class="order-checkbox" value="<%= order.id %>"></td>
+                        <td>
+                          <div class="fw-500 text-primary text-truncate"><%= order.order_number %></div>
+                          <div class="fs-xs text-muted"><%= order.order_date&.strftime('%H:%M') %></div>
+                        </td>
+                        <td class="d-none d-md-table-cell">
+                          <div class="d-flex align-items-center">
+                            <div>
+                              <div class="fw-500 text-truncate" title="<%= order.customer_name %>"><%= order.customer_name %></div>
+                              <div class="fs-xs text-truncate" title="<%= order.email %>"><%= order.email %></div>
+                              <% if order.instagram_account.present? %>
+                                <div class="fs-xs text-primary text-truncate" title="<%= order.instagram_account %>">
+                                  <i class="fab fa-instagram mr-1"></i> <%= order.instagram_account %>
+                                </div>
+                              <% end %>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="fw-500 text-truncate" title="<%= order.product_name %>"><%= order.product_name %></div>
+                          <div class="fs-xs text-muted">數量: <%= order.quantity %></div>
+                        </td>
+                        <td class="text-right fw-700">
+                          NT$<%= number_with_delimiter(order.total_amount.to_i) %>
+                        </td>
+                        <td>
+                          <span class="badge <%= order_status_class %> fw-500">
+                            <%= order.order_status %>
+                          </span>
+                        </td>
+                        <td class="d-none d-lg-table-cell">
+                          <span class="badge <%= payment_status_class %> fw-500">
+                            <%= order.payment_status %>
+                          </span>
+                          <div class="fs-xs text-muted mt-1 text-truncate"><%= order.payment_method %></div>
+                        </td>
+                        <td>
+                          <div class="btn-group btn-group-sm">
+                            <%= link_to admin_shopline_order_path(order), class: "btn btn-info" do %>
+                              <i class="fal fa-eye"></i>
+                            <% end %>
+                            <%= link_to edit_admin_shopline_order_path(order), class: "btn btn-primary" do %>
+                              <i class="fal fa-edit"></i>
+                            <% end %>
+                            <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false" aria-label="更多">
+                              <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                              <a class="dropdown-item" href="#" onclick="updateStatus(<%= order.id %>, '已完成')">
+                                <i class="fa fa-check text-success mr-1"></i> 標記為已完成
+                              </a>
+                              <a class="dropdown-item" href="#" onclick="updateStatus(<%= order.id %>, '處理中')">
+                                <i class="fa fa-sync text-info mr-1"></i> 標記為處理中
+                              </a>
+                              <a class="dropdown-item" href="#" onclick="updateStatus(<%= order.id %>, '待出貨')">
+                                <i class="fa fa-box text-warning mr-1"></i> 標記為待出貨
+                              </a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item text-danger" href="#" onclick="updateStatus(<%= order.id %>, '已取消')">
+                                <i class="fa fa-times mr-1"></i> 標記為已取消
+                              </a>
+                            </div>
+                          </div>
                         </td>
                       </tr>
                     <% end %>
-                    
-                    <% 
-                      # 訂單狀態對應的樣式
-                      order_status_class = case order.order_status
-                        when '已完成' then 'badge-success'
-                        when '處理中' then 'badge-info'
-                        when '待出貨' then 'badge-warning'
-                        when '已取消' then 'badge-danger'
-                        else 'badge-secondary'
-                      end
-                      
-                      # 付款狀態對應的樣式
-                      payment_status_class = case order.payment_status
-                        when '已付款' then 'badge-success'
-                        when '未付款' then 'badge-danger'
-                        when '已退款' then 'badge-warning'
-                        else 'badge-secondary'
-                      end
-                    %>
-                    <tr>
-                      <td><input type="checkbox" class="order-checkbox" value="<%= order.id %>"></td>
-                      <td>
-                        <div class="fw-500 text-primary"><%= order.order_number %></div>
-                        <div class="fs-xs text-muted">
-                          <%= order.order_date&.strftime('%H:%M') %>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <div>
-                            <div class="fw-500"><%= order.customer_name %></div>
-                            <div class="fs-xs"><%= order.email %></div>
-                            <% if order.instagram_account.present? %>
-                              <div class="fs-xs text-primary">
-                                <i class="fab fa-instagram mr-1"></i> <%= order.instagram_account %>
-                              </div>
-                            <% end %>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="fw-500"><%= order.product_name %></div>
-                        <div class="fs-xs text-muted">數量: <%= order.quantity %></div>
-                      </td>
-                      <td class="text-right fw-700">
-                        NT$<%= number_with_delimiter(order.total_amount.to_i) %>
-                      </td>
-                      <td>
-                        <span class="badge <%= order_status_class %> fw-500">
-                          <%= order.order_status %>
-                        </span>
-                      </td>
-                      <td>
-                        <span class="badge <%= payment_status_class %> fw-500">
-                          <%= order.payment_status %>
-                        </span>
-                        <div class="fs-xs text-muted mt-1"><%= order.payment_method %></div>
-                      </td>
-                      <td>
-                        <div class="btn-group btn-group-sm">
-                          <%= link_to admin_shopline_order_path(order), class: "btn btn-info" do %>
-                            <i class="fal fa-eye"></i>
-                          <% end %>
-                          <%= link_to edit_admin_shopline_order_path(order), class: "btn btn-primary" do %>
-                            <i class="fal fa-edit"></i>
-                          <% end %>
-                          <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false">
-                            <span class="sr-only">Toggle Dropdown</span>
-                          </button>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#" onclick="updateStatus(<%= order.id %>, '已完成')">
-                              <i class="fa fa-check text-success mr-1"></i> 標記為已完成
-                            </a>
-                            <a class="dropdown-item" href="#" onclick="updateStatus(<%= order.id %>, '處理中')">
-                              <i class="fa fa-sync text-info mr-1"></i> 標記為處理中
-                            </a>
-                            <a class="dropdown-item" href="#" onclick="updateStatus(<%= order.id %>, '待出貨')">
-                              <i class="fa fa-box text-warning mr-1"></i> 標記為待出貨
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="#" onclick="updateStatus(<%= order.id %>, '已取消')">
-                              <i class="fa fa-times mr-1"></i> 標記為已取消
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-              
+                  </tbody>
+                </table>
+              </div>
+
               <!-- Pagy 分頁 -->
               <div class="mt-3 d-flex justify-content-center">
                 <%== pagy_bootstrap_nav(@pagy) %>
               </div>
             </div>
           </div>
-        </div>
+        </div> <!-- /.panel-content -->
       </div>
     </div>
   </div>
 </div>
 
-<!-- 自訂時間範圍選擇模態框 -->
+<!-- 自訂時間範圍選擇模態框（原樣） -->
 <div class="modal fade" id="periodSelectModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">選擇自訂時間範圍</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
         <form>
@@ -364,8 +333,24 @@
   </div>
 </div>
 
+<style>
+  /* 行動裝置最佳化（為避免表格撐破與徽章換行） */
+  @media (max-width: 576px) {
+    .panel-hdr h2 { font-size: 1.125rem; }
+    #dt-orders td, #dt-orders th { white-space: nowrap; }
+    #dt-orders .badge { font-size: 0.75rem; padding: .25rem .4rem; }
+    .panel-tag .form-control { min-width: 140px; }
+  }
+  /* 水平滑動時的微弱陰影提示（why: 提示可橫向捲動） */
+  .table-responsive { position: relative; }
+  .table-responsive::after {
+    content: "";
+    position: absolute; top: 0; right: 0; width: 24px; height: 100%;
+    pointer-events: none; box-shadow: inset -16px 0 12px -12px rgba(0,0,0,.15);
+  }
+</style>
+
 <script>
-  // 訂單表格初始化
   $(document).ready(function() {
     // 日期分組顯示切換
     $('#customSwitch1').on('change', function() {
@@ -375,21 +360,20 @@
         $('.date-group-header').hide();
       }
     });
-    
+
     // 全選/取消全選
     $('#select-all-checkbox').on('change', function() {
       $('.order-checkbox').prop('checked', $(this).prop('checked'));
-    });
-    
-    // 重新計算選中數量
-    $('.order-checkbox').on('change', function() {
       updateSelectedCount();
     });
-    
+
+    // 重新計算選中數量
+    $('.order-checkbox').on('change', function() { updateSelectedCount(); });
+
     // 預設顯示日期分組
     $('#customSwitch1').prop('checked', true).trigger('change');
   });
-  
+
   function updateSelectedCount() {
     var count = $('.order-checkbox:checked').length;
     if(count > 0) {
@@ -399,56 +383,55 @@
       $('.batch-actions-container').hide();
     }
   }
-  
+
   function changePageSize(size) {
     let url = new URL(window.location);
     url.searchParams.set('per_page', size);
     window.location = url;
   }
-  
+
   function changeDataPeriod(period) {
     let url = new URL(window.location);
     url.searchParams.set('period', period);
     window.location = url;
   }
-  
+
   function applyCustomDateRange() {
     const startDate = $('#startDate').val();
     const endDate = $('#endDate').val();
-    
+
     if(!startDate || !endDate) {
       alert('請選擇開始和結束日期');
       return;
     }
-    
+
     let url = new URL(window.location);
     url.searchParams.set('start_date', startDate);
     url.searchParams.set('end_date', endDate);
     url.searchParams.delete('period'); // 清除預設期間選擇
     window.location = url;
   }
-  
+
   function updateStatus(orderId, status) {
     if(confirm(`確定要將訂單狀態更改為「${status}」嗎？`)) {
-      // 發送 AJAX 請求更新訂單狀態
-      // 實際實現需根據您的路由和控制器
       console.log(`更新訂單 ${orderId} 狀態為 ${status}`);
+      // TODO: AJAX 呼叫你的後端端點
     }
   }
-  
+
   function bulkUpdateStatus(status) {
     const selectedOrders = $('.order-checkbox:checked').map(function() {
       return $(this).val();
     }).get();
-    
+
     if(selectedOrders.length === 0) {
       alert('請至少選擇一個訂單');
       return;
     }
-    
+
     if(confirm(`確定要將選中的 ${selectedOrders.length} 筆訂單狀態更改為「${status}」嗎？`)) {
-      // 發送 AJAX 請求批量更新訂單狀態
       console.log(`批量更新 ${selectedOrders.join(', ')} 狀態為 ${status}`);
+      // TODO: AJAX 呼叫你的後端端點
     }
   }
 </script>
